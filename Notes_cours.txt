@@ -1,0 +1,49 @@
+- What is the differenece between standardization and normalization ?
+--------------------------------------------------------------------------
+Standardization:
+
+Standardization, also known as Z-score normalization, scales the data so that it has a mean of 0 and a standard deviation of 1.
+It is calculated by subtracting the mean of the data and dividing by the standard deviation: X_new = (X - mean) / std.
+Standardization is useful when the data follows a Gaussian distribution, but it can be applied to any distribution.
+It preserves the shape of the distribution, only changing the mean and standard deviation.
+Standardization is not affected by outliers because there is no predefined range of transformed features .
+Normalization:
+
+Normalization, also known as Min-Max scaling, scales the data to a fixed range, typically between 0 and 1 (or -1 to 1 if there are negative values).
+It is calculated by subtracting the minimum value of the data and dividing by the range: X_new = (X - X_min) / (X_max - X_min).
+Normalization is used when the features have different scales and we want to bring them to a common scale.
+It preserves the relationship between the minimum and maximum values of each feature.
+Normalization is helpful for algorithms that rely on distance calculations, such as K-nearest neighbors with a Euclidean distance measure .
+
+
+- What are the different types of encoding techniques used for categorical data ?
+1. One-Hot Encoding:
+
+One-Hot Encoding represents each category as a binary vector.
+It creates new binary columns for each unique category and assigns a value of 1 or 0 to indicate the presence or absence of that category.
+This technique is suitable when the categories are not ordinal and there is no inherent order or relationship between them.
+One-Hot Encoding is supported by libraries like scikit-learn's OneHotEncoder.
+2. Label Encoding:
+
+Label Encoding assigns a unique numerical label to each category.
+It replaces the categories with their corresponding numeric labels.
+This technique is suitable when the categories have an inherent order or relationship, such as low, medium, and high.
+Label Encoding is supported by libraries like scikit-learn's LabelEncoder.
+3. Ordinal Encoding:
+
+Ordinal Encoding is similar to Label Encoding but assigns numeric labels based on the order of the categories.
+It replaces the categories with their corresponding ordinal values.
+This technique is suitable when the categories have an inherent order or rank.
+Ordinal Encoding can be implemented using libraries like scikit-learn or custom encoding functions.
+4. Frequency-Based Encoding:
+
+Frequency-Based Encoding replaces each category with the frequency or count of that category in the dataset.
+It assigns a numeric value based on the occurrence of each category.
+This technique is useful when the frequency of categories is informative and can be used as a feature.
+Frequency-Based Encoding can be implemented using libraries like category_encoders or custom encoding functions.
+
+5. Target Encoding:
+Target Encoding replaces each category with the mean or other statistical measure of the target variable for that category.
+It uses the target variable to encode the categories.
+This technique is useful when the target variable is informative and can be used to encode the categories.
+Target Encoding can be implemented using libraries like category_encoders or custom encoding functions.
