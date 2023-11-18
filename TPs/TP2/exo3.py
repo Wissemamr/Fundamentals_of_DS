@@ -61,8 +61,7 @@ def project_into_new_dimensions(M, top_eigenvectors):
     return projected_data
 
 
-def apply_PCA (unreduced_data : np.ndarray)-> np.ndarray :
-    
+def apply_PCA(unreduced_data: np.ndarray) -> np.ndarray:
     Mc = compute_centered_matrix(M)
     Mr = reduce_data(Mc)
     Cov = calculate_covar_matrix(Mr)
@@ -70,8 +69,7 @@ def apply_PCA (unreduced_data : np.ndarray)-> np.ndarray :
     top_eigenvectors = filter_eigenvectors(eigenvalues, eigenvectors, var_thresh=0.9)
     projected_data = project_into_new_dimensions(M, top_eigenvectors)
     return projected_data
-    
-    
+
 
 if __name__ == "__main__":
     M = np.array(
