@@ -1,5 +1,5 @@
 import numpy as np
-from scipy.linalg import eigh
+import pandas as pd
 
 """
 NOTE :
@@ -13,114 +13,99 @@ shape of n data rows, and m data columns).
 
 This script contains the implementation of PCA from scratch and then applying dimensionality reduction
 Major steps : 
-
-1. Calculate the reduction matrix V
-2.Calculate the covariance matrix, C,
-3.Find the eigenvalues of the cov matrix C
-4.Sort the eigenvalues in descending order and arrange the
-corresponding eigenvectors accordingly.
-5.Decide how many principal components to keep based on the
-explained variance
-6. Form the projection matrix V by only keeping eigenvectors
-corresponding to the highest eigenvalues.
-7.Calculate the reduced data matrix R
+1. Standardize the data
+2. Calculate the covariance matrix
+3. Calculate the eigenvalues and eigenvectors
+4. Sort the eigenvalues and eigenvectors
+5. Select the main components
+6. Reduce the data
 
 
 
 """
 
-import numpy as np
-
 
 # --------------Utilities-----------------
-def standardize_data(data: np.ndarray) -> np.ndarray:
-    """Calculate the mean adn std and standardize the data using Z-score"""
-    mean = np.mean(data, axis=0)
-    std_dev = np.std(data, axis=0)
-    standaridized_data = (data - mean) / std_dev
-    return standardize_data
+def calculate_mean(column_data: list[float]) -> float:
+    return round(np.mean(column_data), 2)
 
 
-def get_cov_matrix(data: np.ndarray) -> np.ndarray:
-    return np.cov(data, rowvar=False)
+def calculate_std(column_data: list[float]) -> float:
+    return round(np.std(column_data), 2)
 
 
-def get_eigen_val_vect(cov_mat: np.ndarray) -> tuple(np.ndarray):
+def calculate_Z_score(column_data: list) -> list[float]:
+    Z_score = (column_data - calculate_mean(column_data)) / calculate_std(column_data)
+    return Z_score
+
+
+def save_standardized_data(
+    df: pd.DataFrame, convert_df_to_ndarray: bool = True
+) -> pd.DataFrame | np.ndarray:
+    df_stand = pd.DataFrame()
+    for var in df.columns:
+        df_stand[var] = calculate_Z_score(df[var])
+    if convert_df_to_ndarray:
+        return df_stand.to_numpy()
+    else:
+        return df_stand
+
+
+def calculate_covariance(column_data: np.ndarray) -> np.ndarray:
+    return np.cov(column_data, rowvar=False)
+
+
+def get_eigen_val_vect(cov_mat: np.ndarray) -> np.ndarray:
     eigenvals, eigenvects = np.linalg.eig(cov_mat)
-    return tuple(eigenvals, eigenvects)
+    return eigenvals, eigenvects
 
 
-def sort_eigens(eigen_vals: np.ndarray, eigens_vects: np.ndarray) -> tuple(np.ndarray):
+def sort_eigens(eigen_vals: np.ndarray, eigens_vects: np.ndarray):
     """Sort eigenvalues and corresponding eigenvectors"""
     sorted_ids = np.argsort(eigen_vals)[::-1]
-    eigenvalues = eigenvalues[sorted_ids]
-    eigenvectors = eigens_vects[:, sorted_ids]
-    return eigenvalues, eigenvectors
+    sorted_eigenvalues = eigen_vals[sorted_ids]
+    sorted_eigenvectors = eigens_vects[:, sorted_ids]
+    return sorted_eigenvalues, sorted_eigenvectors
+
+
+def select_main_comp(
+    eigenvalues: np.ndarray, eigenvectors: np.ndarray, threshold: float
+) -> np.ndarray:
+    total_variance = np.sum(eigenvalues)
+    # calculate explained variance ratio (evr)
+    evr = eigenvalues / total_variance
+    cumulative_explained_variance = np.cumsum(evr)
+    num_components_to_keep = np.argmax(cumulative_explained_variance >= threshold) + 1
+    chosen_eigvals = eigenvalues[:num_components_to_keep]
+    chosen_eigvects = eigenvectors[:, :num_components_to_keep]
+    return chosen_eigvects
+
+
+def reduce_data(stand_data: np.ndarray, principal_conponents: np.ndarray) -> np.ndarray:
+    return np.dot(stand_data, principal_conponents)
+
+
+def save_reduced_data(reduced_data: np.ndarray) -> pd.DataFrame:
+    reduced_df = pd.DataFrame(
+        reduced_data, columns=["Principal_Component_1", "Principal_Component_2"]
+    )
+    return reduced_df
+
+
+# --------------MAIN PCA SCRIPT-----------------
 
 
 def apply_PCA(unreduced_data: np.ndarray) -> np.ndarray:
     mean_values, std_dev_values = standardize_data(unreduced_data)
 
-    # Step 2:
 
-    # Step 3: Calculate the covariance matrix
-    covariance_matrix = np.cov(standardized_data, rowvar=False)
-
-    # Step 4: Find eigenvalues and eigenvectors
-    # eigenvalues, eigenvectors = np.linalg.eig(covariance_matrix)
-
-    # Step 5: Sort eigenvalues and corresponding eigenvectors
-    sorted_indices = np.argsort(eigenvalues)[::-1]
-    eigenvalues = eigenvalues[sorted_indices]
-    eigenvectors = eigenvectors[:, sorted_indices]
-
-    # Step 6: Decide on the number of principal components to keep
-    total_variance = np.sum(eigenvalues)
-    explained_variance_ratio = eigenvalues / total_variance
-
-    cumulative_explained_variance = np.cumsum(explained_variance_ratio)
-    num_components_to_keep = np.argmax(cumulative_explained_variance >= 0.9) + 1
-
-    # Step 7: Form the projection matrix V
-    projection_matrix = eigenvectors[:, :num_components_to_keep]
-
-    # Step 8: Calculate the reduced data matrix R
-    reduced_data = np.dot(standardized_data, projection_matrix)
-
+# -----------------TESTING----------------------
 
 if __name__ == "__main__":
-    data = np.array(
-        [
-            [12, 24, 6],
-            [17, 15.5, -2],
-            [12, 13, 3],
-            [6, 13.5, -2.5],
-            [17, 21, 7.2],
-            [4, 20.3, -0.9],
-        ]
-    )
+    data = {
+        "X": [12, 17, 12, 6, 17, 4],
+        "Y": [24, 15.5, 13, 13.5, 21, 20.3],
+        "Z": [6, -2, 3, -2.5, 7.2, -0.9],
+    }
 
-
-"""
-
-    print("Original Data:")
-    print(data)
-    print("\nStandardized Data:")
-    print(standardized_data)
-    print("\nCovariance Matrix:")
-    print(covariance_matrix)
-    print("\nEigenvalues:")
-    print(eigenvalues)
-    print("\nEigenvectors:")
-    print(eigenvectors)
-    print("\nExplained Variance Ratio:")
-    print(explained_variance_ratio)
-    print("\nCumulative Explained Variance:")
-    print(cumulative_explained_variance)
-    print("\nNumber of Components to Keep:")
-    print(num_components_to_keep)
-    print("\nProjection Matrix:")
-    print(projection_matrix)
-    print("\nReduced Data:")
-    print(reduced_data)   
-"""
+    df = pd.DataFrame(data, index=["R1", "R2", "R3", "R4", "R5", "R6"])
