@@ -32,47 +32,42 @@ corresponding to the highest eigenvalues.
 import numpy as np
 
 
-
-#--------------Utilities-----------------
-def standardize_data(data : np.ndarray) -> np.ndarray:
-    '''Calculate the mean adn std and standardize the data using Z-score'''
-    mean = np.mean(data, axis =0)
+# --------------Utilities-----------------
+def standardize_data(data: np.ndarray) -> np.ndarray:
+    """Calculate the mean adn std and standardize the data using Z-score"""
+    mean = np.mean(data, axis=0)
     std_dev = np.std(data, axis=0)
     standaridized_data = (data - mean) / std_dev
     return standardize_data
 
-def get_cov_matrix(data : np.ndarray)-> np.ndarray:
+
+def get_cov_matrix(data: np.ndarray) -> np.ndarray:
     return np.cov(data, rowvar=False)
 
-def get_eigen_val_vect(cov_mat : np.ndarray)-> tuple(np.ndarray):
+
+def get_eigen_val_vect(cov_mat: np.ndarray) -> tuple(np.ndarray):
     eigenvals, eigenvects = np.linalg.eig(cov_mat)
     return tuple(eigenvals, eigenvects)
 
-def sort_eigens(eigen_vals : np.ndarray, eigens_vects : np.ndarray) -> tuple(np.ndarray):
-    ''' Sort eigenvalues and corresponding eigenvectors'''
-    sorted_ids= np.argsort(eigen_vals)[::-1]
+
+def sort_eigens(eigen_vals: np.ndarray, eigens_vects: np.ndarray) -> tuple(np.ndarray):
+    """Sort eigenvalues and corresponding eigenvectors"""
+    sorted_ids = np.argsort(eigen_vals)[::-1]
     eigenvalues = eigenvalues[sorted_ids]
     eigenvectors = eigens_vects[:, sorted_ids]
-    return eigenvalues , eigenvectors
+    return eigenvalues, eigenvectors
 
 
-    
-
-
-
-def apply_PCA(unreduced_data:np.ndarray) -> np.ndarray:
-    
-
+def apply_PCA(unreduced_data: np.ndarray) -> np.ndarray:
     mean_values, std_dev_values = standardize_data(unreduced_data)
 
-    # Step 2: 
-    standardized_data = 
+    # Step 2:
 
     # Step 3: Calculate the covariance matrix
     covariance_matrix = np.cov(standardized_data, rowvar=False)
 
     # Step 4: Find eigenvalues and eigenvectors
-    #eigenvalues, eigenvectors = np.linalg.eig(covariance_matrix)
+    # eigenvalues, eigenvectors = np.linalg.eig(covariance_matrix)
 
     # Step 5: Sort eigenvalues and corresponding eigenvectors
     sorted_indices = np.argsort(eigenvalues)[::-1]
@@ -93,20 +88,20 @@ def apply_PCA(unreduced_data:np.ndarray) -> np.ndarray:
     reduced_data = np.dot(standardized_data, projection_matrix)
 
 
+if __name__ == "__main__":
+    data = np.array(
+        [
+            [12, 24, 6],
+            [17, 15.5, -2],
+            [12, 13, 3],
+            [6, 13.5, -2.5],
+            [17, 21, 7.2],
+            [4, 20.3, -0.9],
+        ]
+    )
 
-if __name__=='__main__':
-    data = np.array([
-    [12, 24, 6],
-    [17, 15.5, -2],
-    [12, 13, 3],
-    [6, 13.5, -2.5],
-    [17, 21, 7.2],
-    [4, 20.3, -0.9]
-])
-    
-    
-    
-'''
+
+"""
 
     print("Original Data:")
     print(data)
@@ -128,4 +123,4 @@ if __name__=='__main__':
     print(projection_matrix)
     print("\nReduced Data:")
     print(reduced_data)   
-'''
+"""
