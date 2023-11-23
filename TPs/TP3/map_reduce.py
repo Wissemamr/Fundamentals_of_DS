@@ -14,13 +14,13 @@ input_data = [
 
 #  Map - Extract words from each sentence
 # tokenize the corpus into words
-def mapper(sentence : str) ->list[tuple[str, int]]:
+def mapper(sentence: str) -> list[tuple[str, int]]:
     words = word_tokenize(sentence)  # Tokenize the sentence
     return [(word, 1) for word in words]  # Return a list of (word, 1) pairs
 
 
 # Reduce - Sum up the counts for each word
-def reducer(word_counts : dict, word_count: tuple(str, int)):
+def reducer(word_counts: dict, word_count: tuple(str, int)):
     if DEBUG:
         print("--", word_counts)
     word, count = word_count
@@ -29,7 +29,7 @@ def reducer(word_counts : dict, word_count: tuple(str, int)):
 
 
 # Map step
-mapped_data  : list[list[tuple[str,int]]]= list(map(mapper, input_data))
+mapped_data: list[list[tuple[str, int]]] = list(map(mapper, input_data))
 flattened_data = reduce(lambda x, y: x + y, mapped_data)
 word_count_result = reduce(reducer, flattened_data, {})
 
