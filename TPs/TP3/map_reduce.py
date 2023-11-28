@@ -1,6 +1,7 @@
 from functools import reduce
-from nltk.tokenize import word_tokenize
+
 import nltk
+from nltk.tokenize import word_tokenize
 
 nltk.download("punkt")
 

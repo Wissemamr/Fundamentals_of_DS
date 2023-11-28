@@ -1,13 +1,12 @@
-import numpy as np
-import pandas as pd
-from sklearn.preprocessing import StandardScaler
-from sklearn.feature_selection import mutual_info_classif
-from sklearn.preprocessing import LabelEncoder
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import precision_score
 from typing import Tuple
 
+import numpy as np
+import pandas as pd
+from sklearn.feature_selection import mutual_info_classif
+from sklearn.metrics import precision_score
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.preprocessing import LabelEncoder, StandardScaler
 
 """
 Experimenting with K-NN
@@ -112,11 +111,8 @@ def get_best_precision_combination(results_df: pd.DataFrame) -> pd.Series:
     return best_combi_row
 
 
-
-def main(data : pd.DataFrame)-> pd.Series:
-    '''
+def main(data: pd.DataFrame) -> pd.Series:
+    """
     takes the titanic dataframe, cleans it, applies knn to predcit whether a passenger woul survive or not based on the passenger's data
-    
-    '''
-    
-    
+
+    """
