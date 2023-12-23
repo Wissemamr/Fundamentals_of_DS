@@ -15,6 +15,12 @@ This repo contains the directed work, practical work  along with the assignments
 - ### TP3 : <br>
 <b> Map reduce with Python</b>
 
+- ### TP4 : <br>
+<b> Sampling and ROC AUC </b>
+
+- ### TP5 : <br>
+<b> Association rules with mlextend </b>
+
 
 ### Homework :
 - ### HW1 : 

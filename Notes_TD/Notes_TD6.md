@@ -18,9 +18,25 @@ where $a$ is the slope and $b$ is the y-intercept
 
 ### Answer :
 #### Definition :
-Least square regression is a form of mathematical regression analysis used to determine the line of best fit for a set of data, providing a visual demonstration of the relationship between the data points.
+The least squares method is a common approach used in linear regression to find the best-fitting line through a set of data points. The goal is to minimize the sum of the squared differences between the observed values (actual data points) and the values predicted by the linear model. This sum of squared differences is known as the "sum of squared errors" or "residual sum of squares" (RSS).
 
 
+Here, $y$ is the dependent variable, 
+
+x is the independent variable, $a$ is the slope of the line, and $b$ is the y-intercept. <br>
+The goal is to find the values of $a$ and $b$ that minimize the sum of squared differences between the observed values $y_i$ and the values predicted by the model $ax_i + b$
+
+Mathematically, this is expressed as:
+$$\text{Minimize} \sum_{i=1}^{n} (y_i - (ax_i + b))^2$$
+
+
+Expanding and simplifying this expression gives the residual sum of squares (RSS):
+$$\text{RSS} = \sum_{i=1}^{n} (y_i - ax_i - b)^2$$
+The least squares method aims to find the values of $a$ and $b$ that minimize this sum
+The partial derivatives of the RSS with respect to $a$ and $b$ are set to zero, and the resulting system of equations is solved to find the values of $a$ and $b$ that minimize the RSS.
+
+$$ \frac{\partial \text{RSS}}{\partial m} = -2 \sum_{i=1}^{n} x_i(y_i - mx_i - b) $$
+$$ \frac{\partial \text{RSS}}{\partial b} = -2 \sum_{i=1}^{n} (y_i - mx_i - b) $$
 
 
 
